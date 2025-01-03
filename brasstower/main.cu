@@ -272,7 +272,7 @@ std::shared_ptr<Scene> initGranularScene()
 
 __global__ void mapParticleInfos(void * ssboDptr, float3 * position, int * phases, const int numParticles)
 {
-	int i = threadIdx.x + __mul24(blockIdx.x, blockDim.x);
+	int i = threadIdx.x + blockIdx.x * blockDim.x;
 	if (i >= numParticles) { return; }
 	//ssboDptr[i] = make_float4(position[i].x, position[i].y, position[i].z, 0.0f);
 	((float*)ssboDptr)[i * 4 + 0] = position[i].x;
@@ -283,7 +283,7 @@ __global__ void mapParticleInfos(void * ssboDptr, float3 * position, int * phase
 
 __global__ void mapMatrices(matrix4 * matrices, quaternion * quaternions, float3 * CMs, const int numRigidBodies)
 {
-	int i = threadIdx.x + __mul24(blockIdx.x, blockDim.x);
+	int i = threadIdx.x + blockIdx.x * blockDim.x;
 	if (i >= numRigidBodies) { return; }
 	float3 CM = CMs[i];
 	matrices[i] = extract_rotation_matrix4(quaternions[i]);

@@ -36,7 +36,7 @@ updateGridId(int * __restrict__ gridIds,
 			 const int3 gridSize,
 			 const int numParticles)
 {
-	const int i = threadIdx.x + __mul24(blockIdx.x, blockDim.x);
+	const int i = threadIdx.x + blockIdx.x * blockDim.x;
 	if (i >= numParticles) { return; }
 
 	const int3 gridPos = calcGridPos(positions[i]);
@@ -51,7 +51,7 @@ findStartId(int * cellStart,
 			const int * sortedGridIds,
 			const int numParticles)
 {
-	const int i = threadIdx.x + __mul24(blockIdx.x, blockDim.x);
+	const int i = threadIdx.x + blockIdx.x * blockDim.x;
 	if (i >= numParticles) { return; }
 
 	const int cell = sortedGridIds[i];
@@ -73,7 +73,7 @@ findStartEndId(int * __restrict__ cellStart,
 			   const int * __restrict__ sortedGridIds,
 			   const int numParticles)
 {
-	const int i = threadIdx.x + __mul24(blockIdx.x, blockDim.x);
+	const int i = threadIdx.x + blockIdx.x * blockDim.x;
 	if (i >= numParticles) { return; }
 
 	const int u = sortedGridIds[i];
@@ -106,7 +106,7 @@ resetStartEndId(int * __restrict__ cellStart,
 				const int * __restrict__ sortedGridIds,
 				const int numParticles)
 {
-	const int i = threadIdx.x + __mul24(blockIdx.x, blockDim.x);
+	const int i = threadIdx.x + blockIdx.x * blockDim.x;
 	if (i >= numParticles) { return; }
 
 	const int u = sortedGridIds[i];
@@ -149,7 +149,7 @@ reorderParticlesData(float3 * __restrict__ sortedNewPositions,
 					 const int * __restrict__ indices,
 					 const int numParticles)
 {
-	const int i = threadIdx.x + __mul24(blockIdx.x, blockDim.x);
+	const int i = threadIdx.x + blockIdx.x * blockDim.x;
 	if (i >= numParticles) { return; }
 
 	int oldIndex = indices[i];

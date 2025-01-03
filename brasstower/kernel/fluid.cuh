@@ -89,7 +89,7 @@ fluidLambda(float * __restrict__ lambdas,
 			const int numParticles,
 			const bool useAkinciCohesionTension)
 {
-	const int i = threadIdx.x + __mul24(blockIdx.x, blockDim.x);
+	const int i = threadIdx.x + blockIdx.x * blockDim.x;
 	if (i >= numParticles || phases[i] > 0) { return; }
 
 	const float3 pi = newPositionsPrev[i];
@@ -172,7 +172,7 @@ fluidPosition(float3 * __restrict__ deltaXs,
 			  const int numParticles,
 			  const bool useAkinciCohesionTension)
 {
-	int i = threadIdx.x + __mul24(blockIdx.x, blockDim.x);
+	int i = threadIdx.x + blockIdx.x * blockDim.x;
 	if (i >= numParticles || phases[i] > 0) { return; }
 
 	const float3 pi = newPositionsPrev[i];
@@ -237,7 +237,7 @@ fluidOmega(float3 * __restrict__ omegas,
 		   const int * __restrict__ cellEnd,
 		   const int numParticles)
 {
-	int i = threadIdx.x + __mul24(blockIdx.x, blockDim.x);
+	int i = threadIdx.x + blockIdx.x * blockDim.x;
 	if (i >= numParticles) { return; }
 
 	const int phasei = phases[i];
@@ -289,7 +289,7 @@ fluidVorticity(float3 * __restrict__ velocities,
 			   const int numParticles,
 			   const float deltaTime)
 {
-	const int i = threadIdx.x + __mul24(blockIdx.x, blockDim.x);
+	const int i = threadIdx.x + blockIdx.x * blockDim.x;
 	if (i >= numParticles) { return; }
 
 	const int phasei = phases[i];
@@ -345,7 +345,7 @@ fluidXSph(float3 * __restrict__ newVelocities,
 		  const int * __restrict__ cellEnd,
 		  const int numParticles)
 {
-	const int i = threadIdx.x + __mul24(blockIdx.x, blockDim.x);
+	const int i = threadIdx.x + blockIdx.x * blockDim.x;
 	if (i >= numParticles) { return; }
 
 	const int phasei = phases[i];
@@ -393,7 +393,7 @@ fluidNormal(float3 * __restrict__ normals,
 			const int * __restrict__ cellEnd,
 			const int numParticles)
 {
-	const int i = threadIdx.x + __mul24(blockIdx.x, blockDim.x);
+	const int i = threadIdx.x + blockIdx.x * blockDim.x;
 	if (i >= numParticles || phases[i] > 0) { return; }
 
 	const int phasei = phases[i];
@@ -447,7 +447,7 @@ fluidAkinciTension(float3 * __restrict__ newVelocities,
 				   const int numParticles,
 				   const float deltaTime)
 {
-	const int i = threadIdx.x + __mul24(blockIdx.x, blockDim.x);
+	const int i = threadIdx.x + blockIdx.x * blockDim.x;
 	if (i >= numParticles || phases[i] > 0) { return; }
 
 	const int phasei = phases[i];

@@ -13,7 +13,7 @@ particleParticleCollisionConstraint(float3 * deltaX,
 									const int numParticles,
 									const float radius)
 {
-	int i = threadIdx.x + __mul24(blockIdx.x, blockDim.x);
+	int i = threadIdx.x + blockIdx.x * blockDim.x;
 	if (i >= numParticles) { return; }
 
 	const float3 xi = positions[i];

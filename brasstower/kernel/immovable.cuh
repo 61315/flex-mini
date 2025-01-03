@@ -7,7 +7,7 @@ immovableConstraints(float3 * __restrict__ newPositions,
 					 const int * __restrict__ newIds,
 					 const int numImmovables)
 {
-	int launchIndex = threadIdx.x + __mul24(blockIdx.x, blockDim.x);
+	int launchIndex = threadIdx.x + blockIdx.x * blockDim.x;
 	if (launchIndex >= numImmovables) { return; }
 
 	int id = newIds[immovableIds[launchIndex]];

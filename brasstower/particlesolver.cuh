@@ -51,7 +51,7 @@ applyGravity(float3 * __restrict__ positions,
 			const int numParticles,
 			const float deltaTime)
 {
-	int i = threadIdx.x + __mul24(blockIdx.x, blockDim.x);
+	int i = threadIdx.x + blockIdx.x * blockDim.x;
 	if (i >= numParticles) { return; }
 	positions[i] += make_float3(0.0f, -9.8f, 0.0f) * deltaTime * deltaTime;
 }
@@ -63,7 +63,7 @@ predictPositions(float3 * __restrict__ newPositions,
 				 const int numParticles,
 				 const float deltaTime)
 {
-	int i = threadIdx.x + __mul24(blockIdx.x, blockDim.x);
+	int i = threadIdx.x + blockIdx.x * blockDim.x;
 	if (i >= numParticles) { return; }
 	newPositions[i] = positions[i] + velocities[i] * deltaTime;
 }
@@ -75,7 +75,7 @@ updateVelocity(float3 * __restrict__ velocities,
 			   const int numParticles,
 			   const float invDeltaTime)
 {
-	int i = threadIdx.x + __mul24(blockIdx.x, blockDim.x);
+	int i = threadIdx.x + blockIdx.x * blockDim.x;
 	if (i >= numParticles) { return; }
 	velocities[i] = (newPositions[i] - positions[i]) * invDeltaTime;
 }
@@ -88,7 +88,7 @@ computeInvScaledMasses(float* __restrict__ invScaledMasses,
 					   const float k,
 					   const int numParticles)
 {
-	int i = threadIdx.x + __mul24(blockIdx.x, blockDim.x);
+	int i = threadIdx.x + blockIdx.x * blockDim.x;
 	if (i >= numParticles) { return; }
 
 	const float e = 2.7182818284f;
@@ -106,7 +106,7 @@ computeInvMassesAndInvScaledMasses(float* __restrict__ invScaledMasses,
 								   const float k,
 								   const int numParticles)
 {
-	int i = threadIdx.x + __mul24(blockIdx.x, blockDim.x);
+	int i = threadIdx.x + blockIdx.x * blockDim.x;
 	if (i >= numParticles) { return; }
 
 	float mass = masses[i];
@@ -125,7 +125,7 @@ updatePositions(float3 * __restrict__ positions,
 				const float threshold,
 				const int numParticles)
 {
-	int i = threadIdx.x + __mul24(blockIdx.x, blockDim.x);
+	int i = threadIdx.x + blockIdx.x * blockDim.x;
 	if (i >= numParticles) { return; }
 
 	const int phase = phases[i];

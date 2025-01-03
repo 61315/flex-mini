@@ -9,7 +9,7 @@ distanceConstraints(float3 * deltaX,
 				    const int * __restrict__ newIds,
 					const int numPairs)
 {
-	int launchIndex = threadIdx.x + __mul24(blockIdx.x, blockDim.x);
+	int launchIndex = threadIdx.x + blockIdx.x * blockDim.x;
 	if (launchIndex >= numPairs) { return; }
 
 	int2 originalPair = distancePairs[launchIndex];

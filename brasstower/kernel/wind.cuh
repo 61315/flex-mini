@@ -10,7 +10,7 @@ applyWindForce(float3 * deltaX,
 			   const int numFaces,
 			   const float deltaTime)
 {
-	int launchIndex = threadIdx.x + __mul24(blockIdx.x, blockDim.x);
+	int launchIndex = threadIdx.x + blockIdx.x * blockDim.x;
 	if (launchIndex >= numFaces) { return; }
 
 	int3 ids = faceIds[launchIndex];

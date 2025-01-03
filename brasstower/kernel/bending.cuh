@@ -8,7 +8,7 @@ bendingConstraints(float3 * deltaX,
 				   const int * __restrict__ newIds,
 				   const int numBendings)
 {
-	int launchIndex = threadIdx.x + __mul24(blockIdx.x, blockDim.x);
+	int launchIndex = threadIdx.x + blockIdx.x * blockDim.x;
 	if (launchIndex >= numBendings) { return; }
 
 	int4 ids = bendings[launchIndex];

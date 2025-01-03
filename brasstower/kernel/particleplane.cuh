@@ -8,7 +8,7 @@ planeStabilize(float3 * __restrict__ positions,
 			   const float3 planeNormal,
 			   const float radius)
 {
-	int i = threadIdx.x + __mul24(blockIdx.x, blockDim.x);
+	int i = threadIdx.x + blockIdx.x * blockDim.x;
 	if (i >= numParticles) { return; }
 	float3 origin2position = planeOrigin - positions[i];
 	float distance = dot(origin2position, planeNormal) + radius;
@@ -26,7 +26,7 @@ particlePlaneCollisionConstraint(float3 * __restrict__ newPositions,
 								 const float3 planeNormal,
 								 const float radius)
 {
-	int i = threadIdx.x + __mul24(blockIdx.x, blockDim.x);
+	int i = threadIdx.x + blockIdx.x * blockDim.x;
 	if (i >= numParticles) { return; }
 	float3 origin2position = planeOrigin - newPositions[i];
 	float distance = dot(origin2position, planeNormal) + radius;

@@ -81,7 +81,7 @@ template <typename T>
 __inline__ __global__ void
 printIfNanKernel(int * p, T * dev, int size)
 {
-	int i = threadIdx.x + __mul24(blockIdx.x, blockDim.x);
+	int i = threadIdx.x + blockIdx.x * blockDim.x;
 	if (i >= size) { return; }
 	if (!isfinite(dev[i]))
 	{
@@ -93,7 +93,7 @@ template <>
 __inline__ __global__ void
 printIfNanKernel(int * p, float3 * dev, int size)
 {
-	int i = threadIdx.x + __mul24(blockIdx.x, blockDim.x);
+	int i = threadIdx.x + blockIdx.x * blockDim.x;
 	if (i >= size) { return; }
 	if (!isfinite(dev[i].x) || !isfinite(dev[i].y) || !isfinite(dev[i].z))
 	{
@@ -171,7 +171,7 @@ setDevArr(T * __restrict__ devArr,
 		  const T value,
 		  const int numValues)
 {
-	int i = threadIdx.x + __mul24(blockIdx.x, blockDim.x);
+	int i = threadIdx.x + blockIdx.x * blockDim.x;
 	if (i >= numValues) { return; }
 	devArr[i] = value;
 }
@@ -192,7 +192,7 @@ setDevArr_devIntPtr(int * __restrict__ devArr,
 					const int * __restrict__ value,
 					const int numValues)
 {
-	int i = threadIdx.x + __mul24(blockIdx.x, blockDim.x);
+	int i = threadIdx.x + blockIdx.x * blockDim.x;
 	if (i >= numValues) { return; }
 	devArr[i] = *value;
 }
@@ -202,7 +202,7 @@ setDevArr_int(int * __restrict__ devArr,
 			  const int value,
 			  const int numValues)
 {
-	int i = threadIdx.x + __mul24(blockIdx.x, blockDim.x);
+	int i = threadIdx.x + blockIdx.x * blockDim.x;
 	if (i >= numValues) { return; }
 	devArr[i] = value;
 }
@@ -212,7 +212,7 @@ setDevArr_float(float * __restrict__ devArr,
 				const float value,
 				const int numValues)
 {
-	int i = threadIdx.x + __mul24(blockIdx.x, blockDim.x);
+	int i = threadIdx.x + blockIdx.x * blockDim.x;
 	if (i >= numValues) { return; }
 	devArr[i] = value;
 }
@@ -222,7 +222,7 @@ setDevArr_int2(int2 * __restrict__ devArr,
 			   const int2 value,
 			   const int numValues)
 {
-	int i = threadIdx.x + __mul24(blockIdx.x, blockDim.x);
+	int i = threadIdx.x + blockIdx.x * blockDim.x;
 	if (i >= numValues) { return; }
 	devArr[i] = value;
 }
@@ -232,7 +232,7 @@ setDevArr_float3(float3 * __restrict__ devArr,
 				 const float3 val,
 				 const int numValues)
 {
-	int i = threadIdx.x + __mul24(blockIdx.x, blockDim.x);
+	int i = threadIdx.x + blockIdx.x * blockDim.x;
 	if (i >= numValues) { return; }
 	devArr[i] = val;
 }
@@ -242,7 +242,7 @@ setDevArr_float4(float4 * __restrict__ devArr,
 				 const float4 val,
 				 const int numValues)
 {
-	int i = threadIdx.x + __mul24(blockIdx.x, blockDim.x);
+	int i = threadIdx.x + blockIdx.x * blockDim.x;
 	if (i >= numValues) { return; }
 	devArr[i] = val;
 }
@@ -253,7 +253,7 @@ setDevArr_counterIncrement(int * __restrict__ devArr,
 						   const int incrementValue,
 						   const int numValues)
 {
-	int i = threadIdx.x + __mul24(blockIdx.x, blockDim.x);
+	int i = threadIdx.x + blockIdx.x * blockDim.x;
 	if (i >= numValues) { return; }
 	devArr[i] = atomicAdd(counter, incrementValue);
 }
@@ -263,7 +263,7 @@ accDevArr_float3(float3 * __restrict__ devArr,
 				 const float3 * __restrict__ delta,
 				 const int numValues)
 {
-	int i = threadIdx.x + __mul24(blockIdx.x, blockDim.x);
+	int i = threadIdx.x + blockIdx.x * blockDim.x;
 	if (i >= numValues) { return; }
 	devArr[i] += delta[i];
 }
@@ -274,7 +274,7 @@ accDevArr_int(int * __restrict__ devArr,
 			  const int delta,
 			  const int numValues)
 {
-	int i = threadIdx.x + __mul24(blockIdx.x, blockDim.x);
+	int i = threadIdx.x + blockIdx.x * blockDim.x;
 	if (i >= numValues) { return; }
 	devArr[i] += delta;
 }
@@ -284,7 +284,7 @@ accDevArr_int2(int2 * __restrict__ devArr,
 			   const int2 delta,
 			   const int numValues)
 {
-	int i = threadIdx.x + __mul24(blockIdx.x, blockDim.x);
+	int i = threadIdx.x + blockIdx.x * blockDim.x;
 	if (i >= numValues) { return; }
 	devArr[i] += delta;
 }
@@ -294,7 +294,7 @@ accDevArr_int3(int3 * __restrict__ devArr,
 			   const int3 delta,
 			   const int numValues)
 {
-	int i = threadIdx.x + __mul24(blockIdx.x, blockDim.x);
+	int i = threadIdx.x + blockIdx.x * blockDim.x;
 	if (i >= numValues) { return; }
 	devArr[i] += delta;
 }
@@ -304,7 +304,7 @@ accDevArr_int4(int4 * __restrict__ devArr,
 			   const int4 delta,
 			   const int numValues)
 {
-	int i = threadIdx.x + __mul24(blockIdx.x, blockDim.x);
+	int i = threadIdx.x + blockIdx.x * blockDim.x;
 	if (i >= numValues) { return; }
 	devArr[i] += delta;
 }
@@ -313,7 +313,7 @@ __inline__ __global__ void
 initOrder_int(int * __restrict__ devArr,
 			  const int numValues)
 {
-	int i = threadIdx.x + __mul24(blockIdx.x, blockDim.x);
+	int i = threadIdx.x + blockIdx.x * blockDim.x;
 	if (i >= numValues) { return; }
 	devArr[i] = i;
 }
@@ -336,7 +336,7 @@ initPositionBox(float3 * __restrict__ positions,
 				const float3 step,
 				const int numParticles)
 {
-	int i = threadIdx.x + __mul24(blockIdx.x, blockDim.x);
+	int i = threadIdx.x + blockIdx.x * blockDim.x;
 	if (i >= numParticles) { return; }
 	int x = i % dimension.x;
 	int y = (i / dimension.x) % dimension.y;
@@ -350,7 +350,7 @@ inverseMapping(int * __restrict__ mapValuesToIndex,
 			   const int * __restrict__ mapIndexToValues,
 			   const int numValues)
 {
-	int i = threadIdx.x + __mul24(blockIdx.x, blockDim.x);
+	int i = threadIdx.x + blockIdx.x * blockDim.x;
 	if (i >= numValues) { return; }
 
 	// we now have map i -> value
